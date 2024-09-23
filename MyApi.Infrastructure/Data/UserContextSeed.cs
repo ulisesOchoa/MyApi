@@ -11,7 +11,6 @@ namespace MyApi.Infrastructure.Data
             try
             {
                 await context.Database.EnsureCreatedAsync();
-
                 if (!context.Users.Any())
                 {
                     context.Users.AddRange(GetUsers());

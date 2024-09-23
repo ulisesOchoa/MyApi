@@ -22,17 +22,23 @@ namespace MyApi.Presentation
         {
             services.AddControllers();
             services.AddDbContext<Context>(
-                m => m.UseSqlServer(Configuration.GetConnectionString("SqlConnectionString")),
-                ServiceLifetime.Singleton
+                m => m.UseSqlServer(Configuration.GetConnectionString("SqlConnectionString"))
+                //ServiceLifetime.Singleton
             );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "User Api Review", Version = "V1" });
             });
             services.AddAutoMapper(typeof(Startup));
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateUserCommandHandler).Assembly));
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(typeof(CreateUserCommandHandler).Assembly);
+            });
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+            // Repositories
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
